@@ -1,15 +1,17 @@
 package cycling;
 
-
+import java.util.Dictionary;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Hashtable;
 
 public class CyclingPortalImpl implements MiniCyclingPortal{
 
     public ArrayList<Integer> RacesArrList = new ArrayList<>();
+    private Dictionary<Integer,Race> AllRaces = new Hashtable<>();
     @Override
     public int[] getRaceIds() {
         int[] Races = RacesArrList.stream().mapToInt(Integer::intValue).toArray();//I hate working with lists, so im using ArrayLists :)
@@ -20,17 +22,20 @@ public class CyclingPortalImpl implements MiniCyclingPortal{
     public int createRace(String name, String description) throws IllegalNameException, InvalidNameException {
         Race newRace = new Race(name,description);
         RacesArrList.add(newRace.getRaceID());
+        AllRaces.put(newRace.getRaceID(), newRace);
         return newRace.getRaceID();
     }
 
     @Override
     public String viewRaceDetails(int raceId) throws IDNotRecognisedException {
-        return null;
+        return AllRaces.get(raceId).GetDetails();
     }
 
     @Override
     public void removeRaceById(int raceId) throws IDNotRecognisedException {
-
+        RacesArrList.remove(raceId);
+        AllRaces.get(raceId).DELETE();
+        AllRaces.remove(raceId);
     }
 
     @Override
@@ -40,6 +45,7 @@ public class CyclingPortalImpl implements MiniCyclingPortal{
 
     @Override
     public int addStageToRace(int raceId, String stageName, String description, double length, LocalDateTime startTime, StageType type) throws IDNotRecognisedException, IllegalNameException, InvalidNameException, InvalidLengthException {
+        AllRaces.get(raceId).AddStage(new Stage(stageName,type,description,length,startTime));
         return 0;
     }
 

@@ -1,5 +1,7 @@
 import cycling.*;
 
+import java.time.LocalDateTime;
+
 /**
  * A short program to illustrate an app testing some minimal functionality of a
  * concrete implementation of the CyclingPortal interface -- note you
@@ -24,13 +26,18 @@ public class MyTestApp {
         MiniCyclingPortal portal1 = new CyclingPortalImpl();
         try {
             portal1.createRace("race1","the first race");
+            portal1.addStageToRace(1,"Stage1","afa",3.1, LocalDateTime.now(),StageType.FLAT);
+            portal1.addStageToRace(1,"Stage1","afa",3.1, LocalDateTime.now(),StageType.FLAT);
             portal1.createRace("race2","second race");
+            portal1.createRace("race3","the first race");
+            portal1.createRace("race4","second race");
+            System.out.println(portal1.viewRaceDetails(1));
             for (int i = 0; i < portal1.getRaceIds().length;i++){
                 System.out.println(portal1.getRaceIds()[i]);
             }
         } catch (IllegalNameException e) {
             throw new RuntimeException(e);
-        } catch (InvalidNameException e) {
+        } catch (InvalidNameException | IDNotRecognisedException | InvalidLengthException e) {
             throw new RuntimeException(e);
         }
 
