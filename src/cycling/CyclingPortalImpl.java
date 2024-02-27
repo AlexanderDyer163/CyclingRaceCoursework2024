@@ -11,7 +11,8 @@ import java.util.Hashtable;
 public class CyclingPortalImpl implements MiniCyclingPortal{
 
     public ArrayList<Integer> RacesArrList = new ArrayList<>();
-    private Dictionary<Integer,Race> AllRaces = new Hashtable<>();
+    private Dictionary<Integer,Race> AllRaces = new Hashtable<>();//gets race by id
+    private Dictionary<Integer,Stage> AllStages = new Hashtable<>();//gets stage by id
     @Override
     public int[] getRaceIds() {
         int[] Races = RacesArrList.stream().mapToInt(Integer::intValue).toArray();//I hate working with lists, so im using ArrayLists :)
@@ -40,13 +41,15 @@ public class CyclingPortalImpl implements MiniCyclingPortal{
 
     @Override
     public int getNumberOfStages(int raceId) throws IDNotRecognisedException {
-        return 0;
+        return AllRaces.get(raceId).Stages.size();
     }
 
     @Override
     public int addStageToRace(int raceId, String stageName, String description, double length, LocalDateTime startTime, StageType type) throws IDNotRecognisedException, IllegalNameException, InvalidNameException, InvalidLengthException {
-        AllRaces.get(raceId).AddStage(new Stage(stageName,type,description,length,startTime));
-        return 0;
+        Stage b;
+        int a = AllRaces.get(raceId).AddStage(b = new Stage(stageName,type,description,length,startTime,raceId));
+        AllStages.put(a,b);
+        return a;
     }
 
     @Override
@@ -56,17 +59,20 @@ public class CyclingPortalImpl implements MiniCyclingPortal{
 
     @Override
     public double getStageLength(int stageId) throws IDNotRecognisedException {
-        return 0;
+        return AllStages.get(stageId).length;
     }
 
     @Override
     public void removeStageById(int stageId) throws IDNotRecognisedException {
-
+        AllStages.get(stageId).DELETE();
+        AllRaces.get(AllStages.get(stageId).ParentID);
     }
 
     @Override
     public int addCategorizedClimbToStage(int stageId, Double location, CheckpointType type, Double averageGradient, Double length) throws IDNotRecognisedException, InvalidLocationException, InvalidStageStateException, InvalidStageTypeException {
-        return 0;
+        Checkpoint climb = new Climb(location,type,length,averageGradient);
+        AllStages.get(stageId).addCheckpoint(climb);
+        return climb.getCheckpointID();
     }
 
     @Override

@@ -35,9 +35,10 @@ public class Race implements IDGenerator {
 
         return string;
     }
-    protected void AddStage(Stage a){
+    protected int AddStage(Stage a){
         Stages.add(a);
         TotalLength += a.getLength();
+        return a.stageID;
     }
 
 }

@@ -26,11 +26,12 @@ public class MyTestApp {
         MiniCyclingPortal portal1 = new CyclingPortalImpl();
         try {
             portal1.createRace("race1","the first race");
-            portal1.addStageToRace(1,"Stage1","afa",3.1, LocalDateTime.now(),StageType.FLAT);
-            portal1.addStageToRace(1,"Stage1","afa",3.1, LocalDateTime.now(),StageType.FLAT);
+            int j = portal1.addStageToRace(1,"Stage1","afa",3.1, LocalDateTime.now(),StageType.FLAT);
+            portal1.addStageToRace(1,"Stage2","afa",3.1, LocalDateTime.now(),StageType.FLAT);
             portal1.createRace("race2","second race");
             portal1.createRace("race3","the first race");
             portal1.createRace("race4","second race");
+            portal1.removeStageById(j);
             System.out.println(portal1.viewRaceDetails(1));
             for (int i = 0; i < portal1.getRaceIds().length;i++){
                 System.out.println(portal1.getRaceIds()[i]);
