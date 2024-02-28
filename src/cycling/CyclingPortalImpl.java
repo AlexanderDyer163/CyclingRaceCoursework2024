@@ -13,6 +13,7 @@ public class CyclingPortalImpl implements MiniCyclingPortal{
     public ArrayList<Integer> RacesArrList = new ArrayList<>();
     private Dictionary<Integer,Race> AllRaces = new Hashtable<>();//gets race by id
     private Dictionary<Integer,Stage> AllStages = new Hashtable<>();//gets stage by id
+    private Dictionary<Integer,Checkpoint> AllCheckpoints = new Hashtable<>();
     @Override
     public int[] getRaceIds() {
         int[] Races = RacesArrList.stream().mapToInt(Integer::intValue).toArray();//I hate working with lists, so im using ArrayLists :)
@@ -35,13 +36,13 @@ public class CyclingPortalImpl implements MiniCyclingPortal{
     @Override
     public void removeRaceById(int raceId) throws IDNotRecognisedException {
         RacesArrList.remove(raceId);
-        AllRaces.get(raceId).DELETE();
+        AllRaces.get(raceId).DELETE(AllRaces,AllStages);
         AllRaces.remove(raceId);
     }
 
     @Override
     public int getNumberOfStages(int raceId) throws IDNotRecognisedException {
-        return AllRaces.get(raceId).Stages.size();
+        return AllRaces.get(raceId).getStages().size();
     }
 
     @Override
@@ -54,7 +55,11 @@ public class CyclingPortalImpl implements MiniCyclingPortal{
 
     @Override
     public int[] getRaceStages(int raceId) throws IDNotRecognisedException {
-        return new int[0];
+        int[] stageIDList = new int[getNumberOfStages(raceId)];
+        for (int i = 0; i < stageIDList.length;i++){
+            stageIDList[i] = AllRaces.get(raceId).getStages().get(i).getStageID();
+        }
+        return stageIDList;
     }
 
     @Override
@@ -64,25 +69,30 @@ public class CyclingPortalImpl implements MiniCyclingPortal{
 
     @Override
     public void removeStageById(int stageId) throws IDNotRecognisedException {
-        AllStages.get(stageId).DELETE();
-        AllRaces.get(AllStages.get(stageId).ParentID);
+        AllStages.get(stageId).DELETE(AllRaces,AllStages);//Passes all the data of the platform
+        AllRaces.get(AllStages.get(stageId)).getStages().remove(stageId);
     }
 
     @Override
     public int addCategorizedClimbToStage(int stageId, Double location, CheckpointType type, Double averageGradient, Double length) throws IDNotRecognisedException, InvalidLocationException, InvalidStageStateException, InvalidStageTypeException {
-        Checkpoint climb = new Climb(location,type,length,averageGradient);
+        Checkpoint climb = new Climb(stageId,location,type,length,averageGradient);
         AllStages.get(stageId).addCheckpoint(climb);
+        AllCheckpoints.put(climb.getCheckpointID(),climb);
         return climb.getCheckpointID();
     }
 
     @Override
     public int addIntermediateSprintToStage(int stageId, double location) throws IDNotRecognisedException, InvalidLocationException, InvalidStageStateException, InvalidStageTypeException {
-        return 0;
+        Sprint sprint = new Sprint(stageId,location);
+        AllStages.get(stageId).addCheckpoint(sprint);
+        AllCheckpoints.put(sprint.getCheckpointID(),sprint);
+        return sprint.getCheckpointID();
     }
 
     @Override
     public void removeCheckpoint(int checkpointId) throws IDNotRecognisedException, InvalidStageStateException {
-
+        AllCheckpoints.get(checkpointId).DELETE(AllStages);
+        AllCheckpoints.remove(checkpointId);
     }
 
     @Override

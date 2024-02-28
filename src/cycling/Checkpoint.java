@@ -1,20 +1,25 @@
 package cycling;
 
+import java.util.Dictionary;
+
 public class Checkpoint implements IDGenerator {
-    protected int checkpointID;
+    protected int checkpointID = GenerateID(nextID);
+    private int parentID;
     protected Double location;
     protected CheckpointType type;
-    protected Double length;
     protected static int nextID;
 
-    public Checkpoint(Double location, CheckpointType type, Double length) {
+    public Checkpoint(int parentID, Double location) {
+        this.parentID = parentID;
         this.location = location;
-        this.type = type;
-        this.length = length;
         this.checkpointID = GenerateID(nextID);
     }
 
     public int getCheckpointID() {
         return checkpointID;
+    }
+
+    public void DELETE(Dictionary<Integer, Stage> AllStages){
+        AllStages.get(parentID).Checkpoints.remove(this);
     }
 }

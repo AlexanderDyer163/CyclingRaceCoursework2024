@@ -2,9 +2,10 @@ package cycling;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Dictionary;
 
 public class Stage implements IDGenerator{
-    protected int stageID;
+    private int stageID = GenerateID(nextID);
     protected String stageName;
     protected StageType type;
     protected Double length;
@@ -21,17 +22,22 @@ public class Stage implements IDGenerator{
         this.type = type;
         this.length = length;
         this.startTime = startTime;
-        this.stageID = GenerateID(nextID);
         this.ParentID = parentID;
 
+    }
+
+    public int getStageID() {
+        return stageID;
     }
 
     public void addCheckpoint(Checkpoint a){
         Checkpoints.add(a);
     }
-    public void DELETE(){
+    public void DELETE(Dictionary<Integer,Race> AllRaces,Dictionary<Integer,Stage> AllStages){
         for(int i = 0; i < Checkpoints.size();i++){
-            Checkpoints.remove(i);
+            Checkpoints.get(i).DELETE(AllStages);
         }
+        AllRaces.get(ParentID).getStages().remove(this);
+        AllStages.remove(stageID);
     }
 }

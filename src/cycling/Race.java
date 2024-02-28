@@ -1,10 +1,12 @@
 package cycling;
 
 import java.util.ArrayList;
+import java.util.Dictionary;
+
 public class Race implements IDGenerator {
     protected String name;
     protected String description;
-    protected ArrayList<Stage> Stages = new ArrayList<>();
+    private ArrayList<Stage> Stages = new ArrayList<>();
     private static int raceID;
     private static int nextID = 1;
     private Double TotalLength = 0.0;
@@ -15,15 +17,19 @@ public class Race implements IDGenerator {
         this.raceID = GenerateID(nextID++);
     }
 
-    public void DELETE(){
+    public void DELETE(Dictionary<Integer,Race> AllRaces,Dictionary<Integer,Stage> AllStages){
         for(int i = 0; i < Stages.size();i++){
-            Stages.get(i).DELETE();
-            Stages.remove(i);
+            Stages.get(i).DELETE(AllRaces,AllStages);
         }
+        AllRaces.remove(raceID);
     }
 
     protected int getRaceID() {
         return raceID;
+    }
+
+    public ArrayList<Stage> getStages() {
+        return Stages;
     }
 
     protected String GetDetails(){
@@ -38,7 +44,7 @@ public class Race implements IDGenerator {
     protected int AddStage(Stage a){
         Stages.add(a);
         TotalLength += a.getLength();
-        return a.stageID;
+        return a.getStageID();
     }
 
 }
