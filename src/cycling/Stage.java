@@ -5,14 +5,15 @@ import java.util.ArrayList;
 import java.util.Dictionary;
 
 public class Stage implements IDGenerator{
-    private int stageID = GenerateID(nextID);
+    private int stageID = GenerateID(nextID++);
     protected String stageName;
     protected StageType type;
     protected Double length;
-    private static int nextID = 1;
+    private static int nextID;
     protected LocalDateTime startTime;
-    protected ArrayList<Checkpoint> Checkpoints;
+    protected ArrayList<Checkpoint> Checkpoints = new ArrayList<Checkpoint>();
     protected int ParentID;
+    private String State = "Preparing";
     public Double getLength() {
         return length;
     }
@@ -23,11 +24,14 @@ public class Stage implements IDGenerator{
         this.length = length;
         this.startTime = startTime;
         this.ParentID = parentID;
-
     }
 
     public int getStageID() {
         return stageID;
+    }
+
+    public void setState(String state) {
+        State = state;
     }
 
     public void addCheckpoint(Checkpoint a){

@@ -1,12 +1,9 @@
 package cycling;
 
-import java.util.Dictionary;
+import java.util.*;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Hashtable;
 
 public class CyclingPortalImpl implements MiniCyclingPortal{
 
@@ -23,6 +20,19 @@ public class CyclingPortalImpl implements MiniCyclingPortal{
     @Override
     public int createRace(String name, String description) throws IllegalNameException, InvalidNameException {
         Race newRace = new Race(name,description);
+        System.out.println(newRace.name);
+        if(newRace.name == "" || newRace.name.contains("\s") || newRace.name.length()>30){
+            throw new InvalidNameException("-Race Name Cannot Contain Spaces, Be Greater Than 30 Letters Or Left Empty.-");
+        }
+        RacesArrList.forEach(x -> {
+            if (AllRaces.get(x).name == name){
+                try {
+                    throw new IllegalNameException("-Race Already Exists With Name-");
+                } catch (IllegalNameException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
         RacesArrList.add(newRace.getRaceID());
         AllRaces.put(newRace.getRaceID(), newRace);
         return newRace.getRaceID();
@@ -97,12 +107,19 @@ public class CyclingPortalImpl implements MiniCyclingPortal{
 
     @Override
     public void concludeStagePreparation(int stageId) throws IDNotRecognisedException, InvalidStageStateException {
-
+        AllStages.get(stageId).setState("waiting for results");
     }
 
     @Override
     public int[] getStageCheckpoints(int stageId) throws IDNotRecognisedException {
-        return new int[0];
+        ArrayList<Checkpoint> checks = AllStages.get(stageId).Checkpoints;
+        CheckpointLocationComparator comparator = new CheckpointLocationComparator();
+        Collections.sort(checks,comparator);
+        int[] CheckList = new int[AllStages.get(stageId).Checkpoints.size()];
+        for (int i = 0; i < checks.size();i++){
+            CheckList[i] = checks.get(i).checkpointID;
+        }
+        return CheckList;
     }
 
     @Override

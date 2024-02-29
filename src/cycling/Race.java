@@ -7,14 +7,14 @@ public class Race implements IDGenerator {
     protected String name;
     protected String description;
     private ArrayList<Stage> Stages = new ArrayList<>();
-    private static int raceID;
-    private static int nextID = 1;
+    private int raceID = GenerateID(nextID++);
+    private static int nextID;
     private Double TotalLength = 0.0;
 
     public Race(String name, String description) {
         this.name = name;
         this.description = description;
-        this.raceID = GenerateID(nextID++);
+
     }
 
     public void DELETE(Dictionary<Integer,Race> AllRaces,Dictionary<Integer,Stage> AllStages){

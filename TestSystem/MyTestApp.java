@@ -25,20 +25,24 @@ public class MyTestApp {
         // TODO replace BadMiniCyclingPortalImpl by CyclingPortalImpl
         MiniCyclingPortal portal1 = new CyclingPortalImpl();
         try {
-            portal1.createRace("race1","the first race");
-            int j = portal1.addStageToRace(1,"Stage1","afa",3.1, LocalDateTime.now(),StageType.FLAT);
-            portal1.addStageToRace(1,"Stage2","afa",3.1, LocalDateTime.now(),StageType.FLAT);
-            portal1.createRace("race2","second race");
-            portal1.createRace("race3","the first race");
-            portal1.createRace("race4","second race");
-            portal1.removeStageById(j);
-            System.out.println(portal1.viewRaceDetails(1));
-            for (int i = 0; i < portal1.getRaceIds().length;i++){
-                System.out.println(portal1.getRaceIds()[i]);
+            int id = portal1.createRace("hmmm","first race");
+            try {
+                int stageID = portal1.addStageToRace(id,"FirstStage","first",8.0,LocalDateTime.now(),StageType.FLAT);
+                portal1.addStageToRace(id,"SecondStage","second",9.0,LocalDateTime.now(),StageType.TT);
+                int otherstage = portal1.addStageToRace(id,"ThirdStage","third",10.0,LocalDateTime.now(),StageType.TT);
+                portal1.addIntermediateSprintToStage(otherstage,2.0);
+                portal1.addIntermediateSprintToStage(stageID,2.0);
+                int[] a = portal1.getStageCheckpoints(stageID);
+                System.out.println("hi");
+            } catch (IDNotRecognisedException e) {
+                throw new RuntimeException(e);
+            } catch (InvalidLengthException | InvalidLocationException | InvalidStageStateException |
+                     InvalidStageTypeException e) {
+                throw new RuntimeException(e);
             }
         } catch (IllegalNameException e) {
             throw new RuntimeException(e);
-        } catch (InvalidNameException | IDNotRecognisedException | InvalidLengthException e) {
+        } catch (InvalidNameException e) {
             throw new RuntimeException(e);
         }
 
