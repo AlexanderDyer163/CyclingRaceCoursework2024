@@ -33,7 +33,7 @@ public class MyTestApp {
                 portal1.addIntermediateSprintToStage(otherstage,2.0);
                 portal1.addIntermediateSprintToStage(stageID,2.0);
                 int[] a = portal1.getStageCheckpoints(stageID);
-                System.out.println("hi");
+                System.out.println(portal1.viewRaceDetails(id));
             } catch (IDNotRecognisedException e) {
                 throw new RuntimeException(e);
             } catch (InvalidLengthException | InvalidLocationException | InvalidStageStateException |

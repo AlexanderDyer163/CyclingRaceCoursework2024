@@ -7,24 +7,24 @@ import java.time.LocalTime;
 
 public class CyclingPortalImpl implements MiniCyclingPortal{
 
-    public ArrayList<Integer> RacesArrList = new ArrayList<>();
     private Dictionary<Integer,Race> AllRaces = new Hashtable<>();//gets race by id
     private Dictionary<Integer,Stage> AllStages = new Hashtable<>();//gets stage by id
     private Dictionary<Integer,Checkpoint> AllCheckpoints = new Hashtable<>();
+    private Dictionary<Integer,Team> AllTeams = new Hashtable<>();
     @Override
     public int[] getRaceIds() {
-        int[] Races = RacesArrList.stream().mapToInt(Integer::intValue).toArray();//I hate working with lists, so im using ArrayLists :)
+        int[] Races = Collections.list(AllRaces.keys()).stream().mapToInt(Integer::intValue).toArray();//I hate working with lists, so im using ArrayLists :)
         return Races;
     }
 
     @Override
     public int createRace(String name, String description) throws IllegalNameException, InvalidNameException {
         Race newRace = new Race(name,description);
-        System.out.println(newRace.name);
         if(newRace.name == "" || newRace.name.contains("\s") || newRace.name.length()>30){
             throw new InvalidNameException("-Race Name Cannot Contain Spaces, Be Greater Than 30 Letters Or Left Empty.-");
         }
-        RacesArrList.forEach(x -> {
+
+        Collections.list(AllRaces.keys()).forEach(x -> {
             if (AllRaces.get(x).name == name){
                 try {
                     throw new IllegalNameException("-Race Already Exists With Name-");
@@ -33,7 +33,6 @@ public class CyclingPortalImpl implements MiniCyclingPortal{
                 }
             }
         });
-        RacesArrList.add(newRace.getRaceID());
         AllRaces.put(newRace.getRaceID(), newRace);
         return newRace.getRaceID();
     }
@@ -45,7 +44,6 @@ public class CyclingPortalImpl implements MiniCyclingPortal{
 
     @Override
     public void removeRaceById(int raceId) throws IDNotRecognisedException {
-        RacesArrList.remove(raceId);
         AllRaces.get(raceId).DELETE(AllRaces,AllStages);
         AllRaces.remove(raceId);
     }
@@ -124,27 +122,35 @@ public class CyclingPortalImpl implements MiniCyclingPortal{
 
     @Override
     public int createTeam(String name, String description) throws IllegalNameException, InvalidNameException {
-        return 0;
+        Team team = new Team(name,description);
+        AllTeams.put(team.getTeamID(),team);
+        return team.getTeamID();
     }
 
     @Override
     public void removeTeam(int teamId) throws IDNotRecognisedException {
-
+        AllTeams.remove(teamId);
     }
 
     @Override
     public int[] getTeams() {
-        return new int[0];
+        int[] Teams = Collections.list(AllTeams.keys()).stream().mapToInt(Integer::intValue).toArray();//I hate working with lists, so im using ArrayLists :)
+        return Teams;
     }
 
     @Override
     public int[] getTeamRiders(int teamId) throws IDNotRecognisedException {
-        return new int[0];
+        int[] ridersID = new int[AllTeams.get(teamId).getRiders().size()];
+        for (int a = 0; a < ridersID.length; a++){
+           ridersID[a] = AllTeams.get(teamId).getRiders().get(a).getId();
+        }
+        return ridersID;
     }
 
     @Override
     public int createRider(int teamID, String name, int yearOfBirth) throws IDNotRecognisedException, IllegalArgumentException {
-        return 0;
+        Rider newRider = new Rider(AllTeams.get(teamID),name,yearOfBirth);
+        return newRider.getId();
     }
 
     @Override

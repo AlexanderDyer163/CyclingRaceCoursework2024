@@ -14,7 +14,6 @@ public class Race implements IDGenerator {
     public Race(String name, String description) {
         this.name = name;
         this.description = description;
-
     }
 
     public void DELETE(Dictionary<Integer,Race> AllRaces,Dictionary<Integer,Stage> AllStages){
