@@ -11,6 +11,8 @@ public class CyclingPortalImpl implements MiniCyclingPortal{
     private Dictionary<Integer,Stage> AllStages = new Hashtable<>();//gets stage by id
     private Dictionary<Integer,Checkpoint> AllCheckpoints = new Hashtable<>();
     private Dictionary<Integer,Team> AllTeams = new Hashtable<>();
+
+    private Dictionary<Integer, Rider> AllRiders = new Hashtable<>();
     @Override
     public int[] getRaceIds() {
         int[] Races = Collections.list(AllRaces.keys()).stream().mapToInt(Integer::intValue).toArray();//I hate working with lists, so im using ArrayLists :)
@@ -112,7 +114,7 @@ public class CyclingPortalImpl implements MiniCyclingPortal{
     public int[] getStageCheckpoints(int stageId) throws IDNotRecognisedException {
         ArrayList<Checkpoint> checks = AllStages.get(stageId).Checkpoints;
         CheckpointLocationComparator comparator = new CheckpointLocationComparator();
-        Collections.sort(checks,comparator);
+        Collections.sort(checks,comparator);//orders the checkpoints based on their location
         int[] CheckList = new int[AllStages.get(stageId).Checkpoints.size()];
         for (int i = 0; i < checks.size();i++){
             CheckList[i] = checks.get(i).checkpointID;
@@ -142,30 +144,31 @@ public class CyclingPortalImpl implements MiniCyclingPortal{
     public int[] getTeamRiders(int teamId) throws IDNotRecognisedException {
         int[] ridersID = new int[AllTeams.get(teamId).getRiders().size()];
         for (int a = 0; a < ridersID.length; a++){
-           ridersID[a] = AllTeams.get(teamId).getRiders().get(a).getId();
+           ridersID[a] = AllTeams.get(teamId).getRiders().get(a);
         }
         return ridersID;
     }
 
     @Override
     public int createRider(int teamID, String name, int yearOfBirth) throws IDNotRecognisedException, IllegalArgumentException {
-        Rider newRider = new Rider(AllTeams.get(teamID),name,yearOfBirth);
+        Rider newRider = new Rider(teamID,name,yearOfBirth);
         return newRider.getId();
     }
 
     @Override
     public void removeRider(int riderId) throws IDNotRecognisedException {
-
+        AllRiders.remove(riderId);
+        AllTeams.get(AllRiders.get(riderId).getCurrentTeamID()).removeRider(riderId);
     }
 
     @Override
     public void registerRiderResultsInStage(int stageId, int riderId, LocalTime... checkpointTimes) throws IDNotRecognisedException, DuplicatedResultException, InvalidCheckpointTimesException, InvalidStageStateException {
-
+        AllRiders.get(riderId).registerResults(stageId,checkpointTimes);
     }
 
     @Override
     public LocalTime[] getRiderResultsInStage(int stageId, int riderId) throws IDNotRecognisedException {
-        return new LocalTime[0];
+        return AllRiders.get(riderId).getStageResults(stageId).getCheckpointTimes();
     }
 
     @Override
