@@ -1,5 +1,6 @@
 package cycling;
 
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -152,6 +153,7 @@ public class CyclingPortalImpl implements MiniCyclingPortal{
     @Override
     public int createRider(int teamID, String name, int yearOfBirth) throws IDNotRecognisedException, IllegalArgumentException {
         Rider newRider = new Rider(teamID,name,yearOfBirth);
+        AllRiders.put(newRider.getId(),newRider);
         return newRider.getId();
     }
 
@@ -163,17 +165,49 @@ public class CyclingPortalImpl implements MiniCyclingPortal{
 
     @Override
     public void registerRiderResultsInStage(int stageId, int riderId, LocalTime... checkpointTimes) throws IDNotRecognisedException, DuplicatedResultException, InvalidCheckpointTimesException, InvalidStageStateException {
-        AllRiders.get(riderId).registerResults(stageId,checkpointTimes);
+        AllStages.get(stageId).registerResults(riderId,new RiderResults(stageId,riderId,checkpointTimes));
     }
 
     @Override
     public LocalTime[] getRiderResultsInStage(int stageId, int riderId) throws IDNotRecognisedException {
-        return AllRiders.get(riderId).getStageResults(stageId).getCheckpointTimes();
+        return AllStages.get(stageId).getRiderResults(riderId).checkpointTimes;
     }
 
     @Override
-    public LocalTime getRiderAdjustedElapsedTimeInStage(int stageId, int riderId) throws IDNotRecognisedException {
-        return null;
+    public LocalTime getRiderAdjustedElapsedTimeInStage(int riderId, int stageId) throws IDNotRecognisedException {
+        ArrayList<RiderResults> StageResults = Collections.list(AllStages.get(stageId).AllRidersResults.elements());//Retrieves the elements of the dictionary
+        FinishTimeComparator a = new FinishTimeComparator();//Creates comparator
+        Collections.sort(StageResults, a);//Sorts the riderresults for the stage by Finishtime
+        boolean Solved = false;
+        long x = 0;
+        long c = 0;
+        LocalTime CurrentSmallestTime = StageResults.get(0).FinishTime;
+        LocalTime PrevTime = StageResults.get(0).FinishTime;
+        boolean ConsecChain = false;
+        LocalTime RiderTime = LocalTime.parse("00:00");
+        long diff = 0;
+        while(Solved == false){
+            LocalTime TempTime = StageResults.get((int) x).FinishTime;
+            if(x == 0){
+                diff = (CurrentSmallestTime.until(TempTime,ChronoUnit.NANOS));
+            }else{
+                diff = (PrevTime.until(TempTime,ChronoUnit.NANOS));
+            }
+            long adjustedTime = 1000000000;
+            if (!((diff <= adjustedTime) && diff >= 0)){
+                CurrentSmallestTime = TempTime;//never runs
+
+            }
+            if(StageResults.get((int) x).RiderID == riderId){
+                RiderTime = CurrentSmallestTime;
+                Solved = true;
+            }
+            x++;
+            PrevTime = TempTime;
+        }
+        return RiderTime;
+
+
     }
 
     @Override

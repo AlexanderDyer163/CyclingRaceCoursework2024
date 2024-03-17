@@ -7,8 +7,8 @@ public class Race implements IDGenerator {
     protected String name;
     protected String description;
     private ArrayList<Stage> Stages = new ArrayList<>();
-    private int raceID = GenerateID(nextID++);
-    private static int nextID;
+    private int raceID = GenerateID();
+
     private Double TotalLength = 0.0;
 
     public Race(String name, String description) {

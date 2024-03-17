@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 public class Team implements IDGenerator {
     private ArrayList<Integer> riders = new ArrayList<>();
-    private int nextID = 1;
-    private int TeamID = GenerateID(nextID++);
+
+    private int TeamID = GenerateID();
     private String Name;
     private String Description;
 

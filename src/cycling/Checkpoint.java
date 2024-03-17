@@ -3,7 +3,7 @@ package cycling;
 import java.util.Dictionary;
 
 public class Checkpoint implements IDGenerator {
-    protected int checkpointID = GenerateID(nextID++);
+    protected int checkpointID = GenerateID();
     private int parentID;
     protected Double location;
     protected CheckpointType type;

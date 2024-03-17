@@ -1,17 +1,20 @@
 package cycling;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Dictionary;
+import java.util.Hashtable;
+import java.util.Map;
 
 public class Stage implements IDGenerator{
-    private int stageID = GenerateID(nextID++);
+    private int stageID = GenerateID();
     protected String stageName;
     protected StageType type;
     protected Double length;
-    private static int nextID;
     protected LocalDateTime startTime;
     protected ArrayList<Checkpoint> Checkpoints = new ArrayList<Checkpoint>();
+    public Dictionary<Integer,RiderResults> AllRidersResults = new Hashtable<>();//holds the riders results for this stage
     protected int ParentID;
     private String State = "Preparing";
     public Double getLength() {
@@ -26,6 +29,10 @@ public class Stage implements IDGenerator{
         this.ParentID = parentID;
     }
 
+    public RiderResults getRiderResults(int RiderID) {
+        return AllRidersResults.get(RiderID);
+    }
+
     public int getStageID() {
         return stageID;
     }
@@ -37,6 +44,9 @@ public class Stage implements IDGenerator{
     public void addCheckpoint(Checkpoint a){
         Checkpoints.add(a);
     }
+    public void registerResults(int RiderID,RiderResults a){
+        AllRidersResults.put(RiderID,a);
+    }
     public void DELETE(Dictionary<Integer,Race> AllRaces,Dictionary<Integer,Stage> AllStages){
         for(int i = 0; i < Checkpoints.size();i++){
             Checkpoints.get(i).DELETE(AllStages);
@@ -44,4 +54,5 @@ public class Stage implements IDGenerator{
         AllRaces.get(ParentID).getStages().remove(this);
         AllStages.remove(stageID);
     }
+
 }

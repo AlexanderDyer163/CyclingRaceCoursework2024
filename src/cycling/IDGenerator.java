@@ -1,8 +1,12 @@
 package cycling;
 
+import java.security.SecureRandom;
+
 public interface IDGenerator {
 
-    default int GenerateID(int NextID){
-        return NextID++;//will make more complicated later
+    default int GenerateID(){
+        SecureRandom random = new SecureRandom();
+        int id = random.nextInt();
+        return id;
     }
 }
