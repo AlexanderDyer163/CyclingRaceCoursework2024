@@ -1,5 +1,7 @@
 package cycling;
 
+import java.util.EnumMap;
+
 /**
  * This enum is used to represent the checkpoint types within stages on road races.
  * 
@@ -45,4 +47,14 @@ public enum CheckpointType {
 	 * toughest of the tough. The longest or steepest climbs, often both combined.
 	 */
 	HC;
+
+	public static Integer[] getPoints(CheckpointType Checkpoint) {
+		EnumMap<CheckpointType, Integer[]> CheckpointPoints = new EnumMap<>(CheckpointType.class);
+		CheckpointPoints.put(C4, new Integer[]{1,0,0,0,0,0,0,0});
+		CheckpointPoints.put(C3, new Integer[]{2,1,0,0,0,0,0,0});
+		CheckpointPoints.put(C2, new Integer[]{5,3,2,1,0,0,0,0});
+		CheckpointPoints.put(C1, new Integer[]{10,8,6,4,2,1,0,0});
+		CheckpointPoints.put(HC, new Integer[]{20,15,12,10,8,6,4,2});
+		return CheckpointPoints.get(Checkpoint);
+	}
 }

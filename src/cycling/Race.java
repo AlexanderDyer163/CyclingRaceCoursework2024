@@ -1,9 +1,10 @@
 package cycling;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Dictionary;
 
-public class Race implements IDGenerator {
+public class Race implements IDGenerator, Serializable {
     protected String name;
     protected String description;
     private ArrayList<Stage> Stages = new ArrayList<>();

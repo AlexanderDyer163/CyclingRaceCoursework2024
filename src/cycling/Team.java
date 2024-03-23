@@ -1,8 +1,9 @@
 package cycling;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Team implements IDGenerator {
+public class Team implements IDGenerator, Serializable {
     private ArrayList<Integer> riders = new ArrayList<>();
 
     private int TeamID = GenerateID();

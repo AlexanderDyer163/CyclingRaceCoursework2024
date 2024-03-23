@@ -1,5 +1,6 @@
 package cycling;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -7,7 +8,7 @@ import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.Map;
 
-public class Stage implements IDGenerator{
+public class Stage implements IDGenerator, Serializable {
     private int stageID = GenerateID();
     protected String stageName;
     protected StageType type;

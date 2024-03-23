@@ -1,11 +1,12 @@
 package cycling;
 
+import java.io.Serializable;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
-public class Rider implements IDGenerator{
+public class Rider implements IDGenerator, Serializable {
 
     private int id = GenerateID();
     private int CurrentTeamID;
@@ -23,6 +24,11 @@ public class Rider implements IDGenerator{
     public int getCurrentTeamID() {
         return CurrentTeamID;
     }
+
+    public void deleteResults(){
+        StageResults = null;
+    }
+
 
 
     public int getId() {

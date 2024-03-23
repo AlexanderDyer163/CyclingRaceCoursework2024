@@ -1,8 +1,9 @@
 package cycling;
 
+import java.io.Serializable;
 import java.util.Dictionary;
 
-public class Checkpoint implements IDGenerator {
+public class Checkpoint implements IDGenerator, Serializable {
     protected int checkpointID = GenerateID();
     private int parentID;
     protected Double location;
