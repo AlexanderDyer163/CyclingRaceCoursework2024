@@ -19,7 +19,11 @@ public class Team implements IDGenerator, Serializable {
         return riders;
     }
     public void removeRider(int riderID){
-        riders.remove(riderID);
+        for (int x = 0; x < riders.size();x++){
+            if (riders.get(x) == riderID){
+                riders.remove(x);
+            }
+        }
     }
 
     public int getTeamID() {

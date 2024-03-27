@@ -15,6 +15,10 @@ public class Checkpoint implements IDGenerator, Serializable {
         this.location = location;
     }
 
+    public int getParentID() {
+        return parentID;
+    }
+
     public int getCheckpointID() {
         return checkpointID;
     }

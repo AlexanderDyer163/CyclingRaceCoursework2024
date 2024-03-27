@@ -1,7 +1,5 @@
 package cycling;
 
-import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.Comparator;
 
 public class CurrentTimeComparator implements Comparator<RiderResults>{

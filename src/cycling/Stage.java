@@ -2,11 +2,7 @@ package cycling;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Dictionary;
-import java.util.Hashtable;
-import java.util.Map;
+import java.util.*;
 
 public class Stage implements IDGenerator, Serializable {
     private int stageID = GenerateID();
@@ -17,7 +13,7 @@ public class Stage implements IDGenerator, Serializable {
     protected ArrayList<Checkpoint> Checkpoints = new ArrayList<Checkpoint>();
     public Dictionary<Integer,RiderResults> AllRidersResults = new Hashtable<>();//holds the riders results for this stage
     protected int ParentID;
-    private String State = "Preparing";
+    public String State = "Preparing";
     public Double getLength() {
         return length;
     }
@@ -52,6 +48,10 @@ public class Stage implements IDGenerator, Serializable {
         for(int i = 0; i < Checkpoints.size();i++){
             Checkpoints.get(i).DELETE(AllStages);
         }
+        for (int p = 0; p < AllRidersResults.size();p++){
+            AllRidersResults.remove(Collections.list(AllRidersResults.keys()).get(p));
+        }
+        AllRaces.get(ParentID).TotalLength = AllRaces.get(ParentID).TotalLength - length;
         AllRaces.get(ParentID).getStages().remove(this);
         AllStages.remove(stageID);
     }

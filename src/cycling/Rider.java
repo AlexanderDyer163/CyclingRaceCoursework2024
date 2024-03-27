@@ -1,10 +1,7 @@
 package cycling;
 
 import java.io.Serializable;
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Dictionary;
-import java.util.Hashtable;
+
 
 public class Rider implements IDGenerator, Serializable {
 

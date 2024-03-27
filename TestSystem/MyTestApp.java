@@ -26,31 +26,21 @@ public class MyTestApp {
 
         // TODO replace BadMiniCyclingPortalImpl by CyclingPortalImpl
         MiniCyclingPortal portal1 = new CyclingPortalImpl();
-        int teamId = portal1.createTeam("First Team!","The first team created");
+        int teamId = portal1.createTeam("FirstTeam!","The first team created");
         int rider1 = portal1.createRider(teamId,"barry1",2004);
+        int rider2 = portal1.createRider(teamId,"barry2",2004);
+        int rider3 = portal1.createRider(teamId,"barry3",2004);
         int race1 = portal1.createRace("TheRace","first race");
-        int stage1 = portal1.addStageToRace(race1,"first stage", "the first race",8.4,LocalDateTime.now(),StageType.FLAT);
-
-        portal1.registerRiderResultsInStage(stage1,rider1,new LocalTime[]{LocalTime.parse("22:22:20"),LocalTime.parse("22:22:19")});
-        int rider2 = portal1.createRider(teamId,"mike2",2003);
-        int rider3 = portal1.createRider(teamId,"jimmy3",2001);
-        int rider4 = portal1.createRider(teamId,"jimmy4",2001);
-        int rider5 = portal1.createRider(teamId,"jimmy5",2001);
-        int rider6 = portal1.createRider(teamId,"jimmy1",2001);
-        int rider7 = portal1.createRider(teamId,"jimmy9",2001);
-        int rider8 = portal1.createRider(teamId,"jimmy10",2001);
-        portal1.registerRiderResultsInStage(stage1,rider2, new LocalTime[]{LocalTime.parse("22:22:59"),LocalTime.parse("22:22:59")});
-        portal1.registerRiderResultsInStage(stage1,rider3,new LocalTime[]{LocalTime.parse("22:22:17"),LocalTime.parse("22:22:21")});
-        portal1.registerRiderResultsInStage(stage1,rider7,new LocalTime[]{LocalTime.parse("22:22:12"),LocalTime.parse("22:22:21")});
-        portal1.registerRiderResultsInStage(stage1,rider4,new LocalTime[]{LocalTime.parse("22:22:20"),LocalTime.parse("22:22:21.5")});
-        portal1.registerRiderResultsInStage(stage1,rider5,new LocalTime[]{LocalTime.parse("22:22:01"),LocalTime.parse("22:22:23.5")});
-        portal1.registerRiderResultsInStage(stage1,rider6,new LocalTime[]{LocalTime.parse("22:22:09"),LocalTime.parse("22:22:28.5")});
-        portal1.registerRiderResultsInStage(stage1,rider8,new LocalTime[]{LocalTime.parse("22:22:19"),LocalTime.parse("22:22:29.5")});
-        //LocalTime[] Results = portal1.getRiderResultsInStage(stage1,rider8);
-        portal1.addCategorizedClimbToStage(stage1,2.5,CheckpointType.C1,3.4,2.6);
-        portal1.addCategorizedClimbToStage(stage1,2.5,CheckpointType.C1,3.4,2.6);
-        portal1.eraseCyclingPortal();
-        portal1.loadCyclingPortal("TextFile.txt");
+        int stage1 = portal1.addStageToRace(race1,"firststage", "the first race",7,LocalDateTime.now(),StageType.FLAT);
+        int climb1 = portal1.addCategorizedClimbToStage(stage1,3.2,CheckpointType.C2,6.5,1.2);
+        int climb2 = portal1.addCategorizedClimbToStage(stage1,3.9,CheckpointType.C2,6.5,1.2);
+        int climb3 = portal1.addIntermediateSprintToStage(stage1,5.9);
+        int climb4 = portal1.addIntermediateSprintToStage(stage1,6.8);
+        portal1.concludeStagePreparation(stage1);
+        portal1.registerRiderResultsInStage(stage1,rider1,new LocalTime[]{LocalTime.parse("00:00:00"),LocalTime.parse("10:00:00"),LocalTime.parse("20:00:10"),LocalTime.parse("20:01:00"),LocalTime.parse("23:00:00"),LocalTime.parse("23:30:00")});
+        portal1.registerRiderResultsInStage(stage1,rider3,new LocalTime[]{LocalTime.parse("00:00:00"),LocalTime.parse("10:00:00"),LocalTime.parse("20:00:00"),LocalTime.parse("20:01:00"),LocalTime.parse("23:00:02"),LocalTime.parse("23:30:02")});
+        portal1.registerRiderResultsInStage(stage1,rider2,new LocalTime[]{LocalTime.parse("00:00:00"),LocalTime.parse("10:00:00"),LocalTime.parse("20:00:00"),LocalTime.parse("20:01:00"),LocalTime.parse("23:00:00"),LocalTime.parse("23:30:00")});
+        System.out.println(portal1.getRidersMountainPointsInStage(stage1)[0]);
     }
 
 }

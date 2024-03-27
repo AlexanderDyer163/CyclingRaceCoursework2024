@@ -50,6 +50,7 @@ public enum CheckpointType {
 
 	public static Integer[] getPoints(CheckpointType Checkpoint) {
 		EnumMap<CheckpointType, Integer[]> CheckpointPoints = new EnumMap<>(CheckpointType.class);
+		CheckpointPoints.put(SPRINT, new Integer[]{20,17,15,13,11,10,9,8,7,6,5,4,3,2,1});
 		CheckpointPoints.put(C4, new Integer[]{1,0,0,0,0,0,0,0});
 		CheckpointPoints.put(C3, new Integer[]{2,1,0,0,0,0,0,0});
 		CheckpointPoints.put(C2, new Integer[]{5,3,2,1,0,0,0,0});

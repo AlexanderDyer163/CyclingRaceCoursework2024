@@ -10,7 +10,7 @@ public class Race implements IDGenerator, Serializable {
     private ArrayList<Stage> Stages = new ArrayList<>();
     private int raceID = GenerateID();
 
-    private Double TotalLength = 0.0;
+    public Double TotalLength = 0.0;
 
     public Race(String name, String description) {
         this.name = name;
