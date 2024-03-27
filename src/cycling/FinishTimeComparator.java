@@ -1,11 +1,11 @@
 package cycling;
 
-import java.time.LocalTime;
 import java.util.Comparator;
 
 public class FinishTimeComparator implements Comparator<RiderResults> {
-    public int compare(RiderResults Check1, RiderResults Check2) {
-        return Check1.FinishTime.compareTo(Check2.FinishTime);
+
+    @Override
+    public int compare(RiderResults o1, RiderResults o2) {
+        return o1.FinishTime.compareTo(o2.FinishTime);
     }
 }
-
